@@ -34,8 +34,6 @@ function App() {
     const inputfield = document.querySelector("input");
     (inputfield as HTMLInputElement).value = "";
 
-
-
     const newMessage: Message = {
       role: "user",
       content: [
@@ -124,7 +122,7 @@ function App() {
 
   return (
     <div className="App h-screen">
-      <section className="chat-box h-full bg-slate-300 flex flex-col">
+      <section className="chat-box h-full bg-slate-300 flex flex-col items-center">
         <h1 className="text-4xl font-bold text-center text-black-500 p-5">
           Interview GPT
         </h1>
@@ -135,6 +133,7 @@ function App() {
           [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:bg-gray-100
         [&::-webkit-scrollbar-thumb]:bg-gray-300
+        w-full max-w-3xl
           "
           ref={scrollableDivRef}
         >
@@ -142,7 +141,7 @@ function App() {
             message.role == "user" ? (
               <div
                 key={generateUUID()}
-                className="bg-slate-200 h-fit w-fit m-1 p-3 rounded-sm self-end"
+                className="bg-slate-200 h-fit w-fit m-1 p-3 rounded-lg self-end"
               >
                 {/*Display the user message content */}
                 {message.content.map((item) =>
@@ -159,9 +158,9 @@ function App() {
                 key={generateUUID()}
               >
                 <h2 className="font-bold mb-2">{modelName}:</h2>
-                <ReactMarkdown
-                  className={"markdown"}
-                >{(message.content[0] as TextContent).text}</ReactMarkdown>
+                <ReactMarkdown className={"markdown"}>
+                  {(message.content[0] as TextContent).text}
+                </ReactMarkdown>
               </div>
             )
           )}
@@ -175,7 +174,9 @@ function App() {
           </div> */}
         </div>
         {/*Input section */}
-        <div className="m-5 rounded-lg bg-slate-500 flex">
+        <div className="m-5 rounded-lg bg-slate-500 flex
+        w-full max-w-3xl
+        ">
           <input
             onInput={(e) => {
               setTypingMessage((e.target as HTMLInputElement).value);
