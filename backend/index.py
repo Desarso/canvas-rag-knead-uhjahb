@@ -6,6 +6,7 @@ from typing import List, Union
 from pydantic import BaseModel
 from openai import OpenAI
 from dotenv import load_dotenv
+import uvicorn
 load_dotenv()
 
 
