@@ -137,6 +137,7 @@ function App() {
           "
           ref={scrollableDivRef}
         >
+          <h2 className="font-semibold">Current Model: {modelName}</h2>
           {messages.map((message) =>
             message.role == "user" ? (
               <div
