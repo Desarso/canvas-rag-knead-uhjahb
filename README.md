@@ -45,6 +45,10 @@ Install packages:
 
     pip install -r requirements.txt
 
+Rename .env.example to .env and add your api key
+
+    OPENAI_KEY=[your_api_key]
+
 Run the backend:
 
     python index.py
