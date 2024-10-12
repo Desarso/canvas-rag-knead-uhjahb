@@ -129,7 +129,7 @@ function App() {
         {/*Messages section */}
         <div
           className="
-          flex flex-col grow bg-white p-5 ml-5 mr-5 rounded-lg overflow-y-auto
+          flex flex-col grow bg-white p-5 ml-5 mr-5 md:rounded-lg overflow-y-auto
           [&::-webkit-scrollbar]:w-2
         [&::-webkit-scrollbar-track]:bg-gray-100
         [&::-webkit-scrollbar-thumb]:bg-gray-300
@@ -174,15 +174,17 @@ function App() {
           </div> */}
         </div>
         {/*Input section */}
-        <div className="m-5 rounded-lg bg-slate-500 flex
-        w-full max-w-3xl
-        ">
+        <div
+          className="m-5 md:rounded-lg bg-slate-500 flex
+        w-full max-w-3xl ml-1 mr-1
+        "
+        >
           <input
             onInput={(e) => {
               setTypingMessage((e.target as HTMLInputElement).value);
               console.log(typingMessage);
             }}
-            className="flex-grow h-full p-3 rounded-l-lg"
+            className="flex-grow h-full p-3 md:rounded-l-lg"
             type="text"
           />
           <button
