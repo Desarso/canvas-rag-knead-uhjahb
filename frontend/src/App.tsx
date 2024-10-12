@@ -187,6 +187,7 @@ function App() {
             }}
             className="flex-grow h-full p-3 md:rounded-l-lg"
             type="text"
+            placeholder="ask away"
           />
           <button
             disabled={gettingResponse}
