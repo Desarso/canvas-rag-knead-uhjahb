@@ -34,8 +34,7 @@ function App() {
     const inputfield = document.querySelector("input");
     (inputfield as HTMLInputElement).value = "";
 
-    console.log(typingMessage);
-    console.log("typinh message", typingMessage);
+
 
     const newMessage: Message = {
       role: "user",
@@ -46,7 +45,6 @@ function App() {
         },
       ],
     };
-    console.log("new message", newMessage);
     messages.push(newMessage);
 
     try {
@@ -56,7 +54,7 @@ function App() {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify([...messages, newMessage]),
+        body: JSON.stringify(messages),
       });
 
       if (!response.ok) {
