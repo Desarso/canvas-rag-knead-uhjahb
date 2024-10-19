@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import ReactMarkdown from "react-markdown";
 import {
   ChevronLeft,
   ChevronRight,
@@ -156,7 +157,11 @@ export function ChatAppComponent() {
                 <div>
                   {message.role === "user"
                     ? (message.content[0] as TextContent).text
-                    : (message.content as String)}
+                    : 
+                    <ReactMarkdown>
+                       {message.content as string}
+                    </ReactMarkdown>
+                   }
                 </div>
               </div>
             </Card>
