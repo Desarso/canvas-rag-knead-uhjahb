@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.markdown code {
+/* .markdown code {
   display: block;
   white-space: pre-wrap;
 }
@@ -11,7 +11,8 @@
   padding: 1.5rem;
   margin: 1rem;
   border-radius: 10px;
-}@layer base {
+}
+@layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -88,4 +89,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
+} */
