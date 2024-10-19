@@ -1,11 +1,16 @@
 # Import the Canvas class
 from canvasapi import Canvas
 from datetime import datetime
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 
 # Canvas API URL
 API_URL = "https://csus.instructure.com"
 # Canvas API key
-API_KEY = "11299~ZyMLXJUVk4F8mX6FE7cXZGnYZtDL77794hFV3Y9JyzWmLTBQNX4ryPQTVFe3ECAD"
+API_KEY = os.getenv("CANVAS_API")
 
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)

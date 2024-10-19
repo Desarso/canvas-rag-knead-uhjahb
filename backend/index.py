@@ -20,27 +20,30 @@ class ImageContent(BaseModel):
 
 class message(BaseModel):
     role: str
-    content: List[Union[TextContent, ImageContent]]
+    content: List[Union[TextContent, ImageContent]] | str
 
 app = FastAPI(title="Interview GPT", version="1.0")
 
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3001"],  # Allow your frontend origin
+    allow_origins=["*"],  # Allow your frontend origin
     allow_credentials=True,
     allow_methods=["*"],  # Allow all methods (GET, POST, etc.)
     allow_headers=["*"],  # Allow all headers
 )
 
 client = OpenAI(
-    api_key=os.getenv("OPENAI_KEY")
+    base_url="https://api.groq.com/openai/v1",
+    api_key=os.environ.get("GROQ_API_KEY")
+
 )
 
 
 def stream_response(messages: List[message]):
+    print(messages[0].__dict__)
     stream = client.chat.completions.create(
-    model="gpt-4o-mini",
+    model="llama-3.1-70b-versatile",
     messages=messages,
     stream=True,
     )
