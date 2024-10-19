@@ -6,6 +6,8 @@ from typing import List, Union
 from pydantic import BaseModel
 from openai import OpenAI
 from dotenv import load_dotenv
+from helpers import canvas
+from fastapi.responses import JSONResponse
 import uvicorn
 load_dotenv()
 
@@ -57,6 +59,20 @@ def post_messages(messages: List[message]):
     return StreamingResponse(stream_response(messages), media_type="text/event-stream")
 
 
+@app.get("/courses")
+def get_courses():
+    courses = canvas.get_courses_for_frontend()
+    return JSONResponse(content=courses)
+
+
+@app.get("/files/{course_id}")
+def get_files(course_id: str):
+    try:
+        files = canvas.get_files_from_course(course_id)
+        return JSONResponse(content=files)
+    except Exception as e:
+        print(e)
+    return JSONResponse(content={"error": "An error occurred."}, status_code=500)
 
 
 
