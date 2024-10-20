@@ -7,6 +7,7 @@ import os
 load_dotenv()
 
 
+
 # Canvas API URL
 API_URL = "https://csus.instructure.com"
 # Canvas API key
@@ -21,6 +22,9 @@ user = canvas.get_user('self')
 courses = user.get_courses(enrollment_status='active',include =['favorites'])
 
 
+
+    
+
 def get_favorite_courses():
     favorite_courses=[]
 
@@ -30,6 +34,16 @@ def get_favorite_courses():
                 favorite_courses.append(course)
                 
     return favorite_courses
+
+def get_courses_for_frontend():
+    courses = get_favorite_courses()
+    parsed = []
+    for course in courses:
+        parsed.append({
+            "course_id": course.id,
+            "course_name": course.name,
+        })
+    return parsed
 
 def custom_serializer(obj):
     if isinstance(obj, datetime):
@@ -42,7 +56,20 @@ def custom_serializer(obj):
 def get_files_from_course(id: str):
     course = canvas.get_course(id)
     files = course.get_files()
-    return files
+    parsed_files = []
+    for file in files:
+        parsed_files.append({
+            "file_id": file.id,
+            "display_name": file.display_name,
+        })
+    return parsed_files
 
 courses = get_favorite_courses()
-print(courses[0].id)
+course = courses[0]
+modules = course.get_modules()
+items = modules[0].get_module_items()
+print(items[0].__dict__)
+
+# for item in items:
+#     print(module.__dict__)
+
