@@ -1,0 +1,16 @@
+This are the only packages we are currently using
+
+pip install python-dotenv
+pip install canvasapi
+pip install llama-index
+pip install fastapi
+pip install openai
+pip install uvicorn
+pip install llama-index-llms-groq
+pip install llama-index-embeddings-huggingface
+pip install llama-index-embeddings-instructor
+pip install chromadb
+pip install llama-index-vector-stores-chroma
+
+##for tooling later
+pip install -U ell-ai

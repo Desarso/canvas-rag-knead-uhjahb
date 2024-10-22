@@ -65,10 +65,14 @@ def get_files_from_course(id: str):
     return parsed_files
 
 courses = get_favorite_courses()
-course = courses[0]
-modules = course.get_modules()
-items = modules[0].get_module_items()
-print(items[0].__dict__)
+print(courses[0])
+# modules = course.get_modules()
+# items = modules[0].get_module_items()
+# print(items[0].__dict__)
+
+files =  get_files_from_course('123876')
+for file in files: 
+    print(file)
 
 # for item in items:
 #     print(module.__dict__)
