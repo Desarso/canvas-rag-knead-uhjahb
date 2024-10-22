@@ -1,0 +1,54 @@
+Background information
+Skip this if you already know the details of the Mandelbrot set, unless you want to read what I have to say anyway.
+
+The Mandelbrot set is the set of all points C such that, given Z0 = 0, the iterative function Zn+1 = Zn2 + C does not approach infinity (it “remains bounded”). So for instance, C = 10 is not part of the Mandelbrot set because iterating Z yields 0, 10, 110, 12110, … which is clearly headed towards infinity. However, C = -1 is a member, because iterating Z in that case yields 0, -1, 0, -1, … and will never go further than that.
+
+The reason it is two-dimensional is because it includes complex numbers as well: those with an imaginary part (a multiple of √-1, labelled “i“) as well as a real part (a “regular” number). For example, the Mandelbrot set includes C = i as Z follows the sequence 0, i, -1 + i, –i, -1 + i, –i, … and continues to alternate like that.
+
+You might think that, with the value constantly being squared, the range of included values must be quite limited. And it is; every point that is a member of the Mandelbrot set is within 2 units of the origin (at C = 0). Most of the most “distant” points are along the negative real axis, up to and including C = -2. That’s why the Mandelbrot set points to the left, by the way.
+
+A rendering of the Mandelbrot set; a large cardioid-like shape is around the origin, and a tangentially-connected circle is centred on -1. It stretches out to -2 but is too small to see.
+I wish more renderings included axes/values like this. Image by Connelly [Public domain], via Wikimedia Commons
+If you were thoroughly absorbing all the words you were just reading and are familiar with the complex plane, you might have noticed that i (where it says “1” under “Im[c]” at the top) certainly doesn’t look like a member. It only appears that way though, because the Mandelbrot set is not completely lumped around one area; it spreads out a fair bit. There is actually a tendril of sorts that extends out to there; it corresponds to the red circle in the following image.
+
+Image rendered with Christian Larsen’s awesome JavaScript tool
+Computational rendering
+Most computers are not designed to handle complex numbers. This poses little obstruction: it can be found mathematically that the square of the point a + bi is simply (a2 – b2) + (2ab)i. If you want to determine this for yourself (and are not already familiar with complex numbers), just remember that i2 = -1.
+
+The other issue is how to determine whether a particular point is bounded. There is no computer algorithm (or at least, certainly none that I know of) that can reliably determine the result of any point you give it. Thus it is necessary to manually iterate every point of interest, by repeatedly squaring it and adding it back into itself. If the result gets too big, for instance more than 10 units away from the origin in any direction, then the point is not a member of the Mandelbrot set. This distance is called the escape radius as it specifies a radius at which a point is determined to have escaped. Imaginative, isn’t it?
+
+Here’s where the big time sucker is: what if a point is a member? You’d be iterating it forever, as it (by definition) would forever remain bounded. Thus the algorithm implements a maximum number of iterations; if any point is iterated more than that many times, it is assumed to be a member. I say “assumed” because, if the maximum iteration count is too low, points will be found that aren’t actually members (since iteration was stopped before that became apparent). This becomes more of an issue near the edge of the set (where you would typically be zoomed-in on, as that’s where all the interesting stuff is), as it’s harder to distinguish what is and what isn’t a member there.
+
+Optimisation
+Hopefully you have a solid understanding of what the Mandelbrot set is and how computer programs can render it. Now I will discuss some techniques to render it a bit faster.
+
+Escape radius
+Quite possibly the simplest optimisation to make is setting the escape radius to 2 rather than anything higher. Just as the entire set is contained within two units of the origin, no member point will ever iterate beyond two units of the origin either. Unfortunately, such a simple optimisation isn’t very effective either: it only affects points that do escape, and even then any that get that far soon escape after just a few more iterations no matter how large the escape radius is. Numbers square quickly, it is literally exponential.
+
+Not calculating square roots
+As I said at the top, I haven’t benchmarked or even tested anything I’m talking about here, so take this at face value. Regardless, I am aware that calculating square roots is not a cheap operation. But in order to calculate the distance from the origin, it’s necessary: apply Pythagoras’ theorem with the real (x) and imaginary (y) components. If you’re running 10000 iterations of every point, calculating a square root each time, this quickly adds up.
+
+Thus it’s probably best to use a different method to determine escapes. And this is it: check each component individually against the escape radius (which is no longer a radius but more of a square). In your program, it might be written thus: if(abs(x) > 2 || abs(y) > 2) escaped = true; It is true that this won’t register the point 1.5 + 1.5i as having escaped, but in every case one more iteration will fix that. I’m quite confident saying that one extra iteration is more efficient than even 1000 square roots.
+
+You could even reduce the number of comparisons by only testing if the real part (x) has escaped, as all escaped values along the imaginary (y) axis will then register as having escaped after another iteration (this doesn’t hold true for the imaginary axis, as any value without an imaginary component will remain on the real axis forever). You could even skip the absolute value all together and just test if the real part is ever greater than 2, but I’m pretty sure the methods in this paragraph are going too far and might actually reduce performance slightly, as well as them just being generally obscure. Stick with using two comparisons as above.
+
+Parallel processing
+There’s not much to say here. Not all environments (e.g. JavaScript) will allow this, but if you can, be sure to process multiple pixels/points simultaneously. It requires no wizardry to do as each point is entirely independent of the others and can be calculated separately, i.e. it is “embarrassingly/pleasingly parallel.”
+
+Utilising simply-connectedness
+I’ve saved the best until last. The biggest timesuck with rendering the set is those points that are members. The algorithm has to go through every single iteration (up to the specified limit) for each of those points, and never gets to quit early. If you use the tool I linked above, you can tell (at high zoom levels) that it visibly slows down on large areas of black, i.e. on points that are members. Fortunately, I think I’ve devised a way to get around this. (again, untested. Some other time, maybe.)
+
+An interesting aspect of the Mandelbrot set is that it is connected: all points are joined to each other with no “islands.” You can somewhat see this in the image up above highlighting the location of i: everything is still connected to the main body even if it doesn’t look like it. This property isn’t too useful, but after some research I found that it is also simply connected: there are no holes; any point that is surrounded by members of the set is itself a member.
+
+Maybe you see where this is going.
+
+If you can find a region that is surrounded by members of the set, you know that everything within it is too without iterating any of them. All you have to do is implement your algorithm such that it leaves holes to be filled.
+
+A grid of cells where the even rows and columns are filled, leaving only those in both an odd row and column.
+Black cells mark those initially calculated. All remaining are surrounded.
+An easy way I can think of to achieve this is to initially test points with even x or y coordinates (assuming you’re counting from 0). The end result of this will be approximately three-quarters of the region tested (it could be slightly more depending on where the boundaries are), with the remaining quarter of points each completely surrounded by eight resolved points (except possibly at the rightmost and bottommost edges). This approach could easily be expanded to leave larger areas bounded; for instance, only cells divisible by three could be initially calculated, leaving 2*2 regions boxed in.
+
+If skipping a quarter of the points in the set isn’t enough, it would be possible to go even further. This makes parallel processing harder as well, unfortunately. What could be done is to calculate points as normal, but as soon as one is found to be a member, stop and try to trace the boundary. Because every point will eventually be calculated anyway, there’s no waste in blindly calculating all the surrounding points, one after another, and only continuing around the boundary of the set. Once this has made its way back to where it started (following the edges of the “screen” if necessary), then you can be certain that the entire interior is part of the set and doesn’t need to be iterated at all. With a large enough area, the time savings must be highly significant.
+
+Conclusion
+At some point I might test and implement these myself, but until then I hope I’ve given you some ideas, or at the very least taught you something interesting about the endlessly-interesting Mandelbrot set.
