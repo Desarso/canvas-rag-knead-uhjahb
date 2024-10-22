@@ -99,9 +99,9 @@ export function ChatAppComponent() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen w-full bg-white">
       {/* Sidebar */}
-      <div
+      {/* <div
         className={`bg-gray-900 text-white transition-all duration-300 ${
           isSidebarOpen ? "w-64" : "w-0"
         }`}
@@ -123,16 +123,16 @@ export function ChatAppComponent() {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <header className="bg-white border-b p-4 flex items-center justify-between">
-          <Button variant="ghost" size="icon" onClick={toggleSidebar}>
+        <header className="bg-white p-4 flex items-center justify-between">
+          {/* <Button variant="ghost" size="icon" onClick={toggleSidebar}>
             <Menu className="h-6 w-6" />
-          </Button>
-          <h1 className="text-xl font-semibold">ChatGPT Clone</h1>
+          </Button> */}
+          {/* <h1 className="text-xl font-semibold">ChatGPT Clone</h1> */}
           <div className="w-6" /> {/* Placeholder for symmetry */}
         </header>
 
