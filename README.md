@@ -43,11 +43,17 @@ Linux/Mac:
 
 Install packages:
 
-    pip install -r requirements.txt
+    pip install python-dotenv
+    pip install canvasapi
+    pip install llama-index
+    pip install fastapi
+    pip install openai
+    pip install uvicorn
 
-Rename .env.example to .env and add your api key
+Rename .env.example to .env and add your api keys
 
-    OPENAI_KEY=[your_api_key]
+    CANVAS_API=
+    GROQ_API_KEY=
 
 Run the backend:
 
