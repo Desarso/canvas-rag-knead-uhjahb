@@ -71,12 +71,15 @@ print(course)
 #print(files)
 modules = course.get_modules()
 items = modules[0].get_module_items()
-print(items[0])
+#print(items[0])
 
-index = 1
+CanvasHelper.download_files_from_course('122492')
+print("done")
+
+"""index = 1
 for module in modules:
     items = module.get_module_items()
-    print("MODULE: ",index)
+    print("MODULE: ",index, module.name)
     index+=1
     for item in items:
         print("     ",item, item.type)
@@ -88,8 +91,7 @@ for module in modules:
             file.download(f"../files/{item.title}")
             break
         if item.type == "ExternalUrl" :
-            print("     url:",item.external_url)
-    break
+            print("     url:",item.external_url)"""
 ## possible workflow for module items, we fetch all the items
 ##save file types
 ##the ones that have url params we fetch json, feed it to an ell function to get only relevant data
