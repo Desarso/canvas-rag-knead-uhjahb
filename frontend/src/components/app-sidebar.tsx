@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import { Plus } from "lucide-react"
 
 import {
   Sidebar,
@@ -32,6 +32,10 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
+          <SidebarMenuButton>
+            <span>New Chat</span>
+            <Plus />
+          </SidebarMenuButton>
           <SidebarGroupLabel>Chats</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

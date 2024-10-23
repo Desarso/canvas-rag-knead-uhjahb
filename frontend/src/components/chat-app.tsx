@@ -7,10 +7,6 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
 import {
-  ChevronLeft,
-  ChevronRight,
-  Menu,
-  PlusCircle,
   Send,
 } from "lucide-react";
 import { Message, TextContent } from "@/models/models";
@@ -19,7 +15,6 @@ export function ChatAppComponent() {
   const [gettingResponse, setGettingResponse] = useState<boolean>(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const handleSend = async () => {
     if (gettingResponse) return;
@@ -94,47 +89,15 @@ export function ChatAppComponent() {
     }
   };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
   return (
     <div className="flex h-screen w-full bg-white">
-      {/* Sidebar */}
-      {/* <div
-        className={`bg-gray-900 text-white transition-all duration-300 ${
-          isSidebarOpen ? "w-64" : "w-0"
-        }`}
-      >
-        <div className="p-4">
-          <Button variant="outline" className="w-full mb-4">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            New chat
-          </Button>
-          <div className="space-y-2">
-            {["Chat 1", "Chat 2", "Chat 3"].map((chat, index) => (
-              <Button
-                key={index}
-                variant="ghost"
-                className="w-full justify-start"
-              >
-                {chat}
-              </Button>
-            ))}
-          </div>
-        </div>
-      </div> */}
       <div className="flex-1 flex flex-col mr-[28px]">
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col mx-0 sm:mx-0 md:mx-[5%] lg:mx-[20%]">
-      {/* <div className="flex-1 flex flex-col ml-0 mr-[28px] sm:ml-0 mr-[28px] md:ml-[5%] mr-[5% + 28px] lg:ml-[20%] mr-[20% + 28px]"> */}
-
 
         {/* Header */}
         <header className="bg-white p-4 flex items-center justify-between">
-          {/* <Button variant="ghost" size="icon" onClick={toggleSidebar}>
-            <Menu className="h-6 w-6" />
-          </Button> */}
+
           {/* <h1 className="text-xl font-semibold">ChatGPT Clone</h1> */}
           <div className="w-6" /> {/* Placeholder for symmetry */}
         </header>
