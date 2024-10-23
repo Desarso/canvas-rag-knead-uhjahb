@@ -18,6 +18,37 @@ class CanvasHelper:
 
     API_URL = "https://csus.instructure.com"
 
+    @staticmethod
+    def download_files_from_course(id: str):
+        base_directory = '../data'
+        
+        if not os.path.exists(base_directory):
+            os.makedirs(base_directory)
+        
+        course_directory = os.path.join(base_directory, id)
+        
+        if not os.path.exists(course_directory): # Create a folder for the course if it doesn't exist
+            os.makedirs(course_directory)
+            print(f"Folder created for course: {id}")
+        else:
+            print(f"Folder for course {id} already exists")
+            return
+        files = CanvasHelper.get_files_from_course(id, API_KEY)        
+        session = canvas._Canvas__requester._session # authorize the download w/ canvas api
+        
+        for file in files:
+            file_path = os.path.join(course_directory, file['display_name'])
+            response = session.get(file['url'], stream=True)
+            
+            if response.status_code == 200:
+                with open(file_path, 'wb') as f:
+                    f.write(response.content)
+                print(f"Downloaded: {file['display_name']}")
+            else:
+                print(f"Failed to download {file['display_name']}")
+
+                
+
     ##get's all enrolled courses from api key
     @staticmethod
     def get_favorite_courses(api_key: str):
