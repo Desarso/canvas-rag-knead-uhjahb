@@ -36,7 +36,12 @@ export function ChatAppComponent() {
 
       messages.push(newMessage);
 
-      const url = "http://127.0.0.1:8000/send";
+      const url = new URL("http://127.0.0.1:8000/chat");
+      url.searchParams.append("collection", "test");
+      url.searchParams.append("chat_id", "chat87");
+      url.searchParams.append("user_id", "46456456");
+      url.searchParams.append("message", input);
+
       try {
         const response = await fetch(url, {
           method: "POST",
@@ -44,7 +49,6 @@ export function ChatAppComponent() {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(messages),
         });
 
         if (!response.ok) {
