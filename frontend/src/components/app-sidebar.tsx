@@ -14,29 +14,16 @@ import {
 // Menu items.
 const items = [
   {
-    title: "Home",
+    title: "Chat 1",
     url: "#",
-    icon: Home,
   },
   {
-    title: "Inbox",
+    title: "Chat 2",
     url: "#",
-    icon: Inbox,
   },
   {
-    title: "Calendar",
+    title: "Chat 3",
     url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
   },
 ]
 
@@ -45,14 +32,13 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Chats</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
-                      <item.icon />
                       <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>

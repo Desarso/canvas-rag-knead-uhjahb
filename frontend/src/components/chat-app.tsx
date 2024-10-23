@@ -124,9 +124,12 @@ export function ChatAppComponent() {
           </div>
         </div>
       </div> */}
-
+      <div className="flex-1 flex flex-col mr-[28px]">
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col mx-0 sm:mx-0 md:mx-[5%] lg:mx-[20%]">
+      {/* <div className="flex-1 flex flex-col ml-0 mr-[28px] sm:ml-0 mr-[28px] md:ml-[5%] mr-[5% + 28px] lg:ml-[20%] mr-[20% + 28px]"> */}
+
+
         {/* Header */}
         <header className="bg-white p-4 flex items-center justify-between">
           {/* <Button variant="ghost" size="icon" onClick={toggleSidebar}>
@@ -182,6 +185,7 @@ export function ChatAppComponent() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
