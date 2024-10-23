@@ -105,11 +105,11 @@ export function ChatAppComponent() {
   };
 
   return (
-    <div className="flex h-screen w-full bg-white">
-      <div className="flex-1 flex flex-col mr-[28px]">
+    <div className="flex h-screen w-full bg-white overflow-auto">
+      <div className="flex-1 flex flex-col mr-[28px] ">
         
       {/* Header */}
-      <header className="sticky top-0 bg-white pb-5 pt-1 pl-2 flex items-left justify-left align-top w-full">
+      <header className="fixed top-0 bg-white pb-5 pt-1 pl-2 justify-left align-top w-full z-10">
         <h1 className="text-xl font-semibold">Canvas RAG Chat</h1>
       </header>
 

@@ -15,7 +15,7 @@ export const Layout = () => {
       <Button 
             data-sidebar="trigger"
             variant="ghost"
-            className="sticky top-0" onClick={() => {setOpen(!open)}}>
+            className="sticky top-0 z-10" onClick={() => {setOpen(!open)}}>
         { open ? <PanelLeft /> : <PanelRight />}
       </Button>
     </SidebarProvider>
