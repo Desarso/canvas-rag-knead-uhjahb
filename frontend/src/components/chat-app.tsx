@@ -96,16 +96,15 @@ export function ChatAppComponent() {
   return (
     <div className="flex h-screen w-full bg-white">
       <div className="flex-1 flex flex-col mr-[28px]">
+        
+      {/* Header */}
+      <header className="sticky top-0 bg-white pb-5 pt-1 pl-2 flex items-left justify-left align-top w-full">
+        <h1 className="text-xl font-semibold">Canvas RAG Chat</h1>
+      </header>
+
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col mx-0 sm:mx-0 md:mx-[5%] lg:mx-[20%]">
-
-        {/* Header */}
-        <header className="bg-white p-1 flex items-center justify-center">
-          <h1 className="text-xl font-semibold">Canvas RAG</h1>
-          <div className="w-6" /> {/* Placeholder for symmetry */}
-        </header>
-
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 p-4 space-y-4">
           {messages.map((message, index) => (
             <Card
               key={index}
@@ -137,7 +136,7 @@ export function ChatAppComponent() {
           ))}
         </div>
         {/*Input area **/}
-        <div className="p-4 border-t">
+        <div className="sticky bottom-0 left-0 right-0 p-4 border-t bg-white">
           <div className="flex space-x-2">
             <Input
               value={input}

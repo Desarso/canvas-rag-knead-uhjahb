@@ -1,12 +1,23 @@
-// src/components/Layout.tsx
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarProvider } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/sidebar/app-sidebar"
+import { PanelLeft, PanelRight } from 'lucide-react'
+import { useState } from "react";
+import { Button } from "../ui/button";
 
 export const Layout = () => {
+  const [open, setOpen] = useState(true)
+
+
+
   return (
-    <SidebarProvider>
+    <SidebarProvider open={open} onOpenChange={setOpen}>
       <AppSidebar />
-        <SidebarTrigger />
+      <Button 
+            data-sidebar="trigger"
+            variant="ghost"
+            className="sticky top-0" onClick={() => {setOpen(!open)}}>
+        { open ? <PanelLeft /> : <PanelRight />}
+      </Button>
     </SidebarProvider>
   );
 };
