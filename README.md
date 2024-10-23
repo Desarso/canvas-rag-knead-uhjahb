@@ -1,7 +1,7 @@
 
-# Interview GPT
+# Canvas Rag
 
-A very simple chatbot app, using reactjs, tailwinds and fastapi.
+A chatbot app with courses context using RAG. 
 
 
 ## Preview
