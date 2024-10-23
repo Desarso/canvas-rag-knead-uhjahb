@@ -96,9 +96,8 @@ export function ChatAppComponent() {
       <div className="flex-1 flex flex-col mx-0 sm:mx-0 md:mx-[5%] lg:mx-[20%]">
 
         {/* Header */}
-        <header className="bg-white p-4 flex items-center justify-between">
-
-          {/* <h1 className="text-xl font-semibold">ChatGPT Clone</h1> */}
+        <header className="bg-white p-1 flex items-center justify-center">
+          <h1 className="text-xl font-semibold">Canvas RAG</h1>
           <div className="w-6" /> {/* Placeholder for symmetry */}
         </header>
 

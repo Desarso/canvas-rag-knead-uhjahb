@@ -1,5 +1,5 @@
 import { ChatAppComponent } from "./components/chat-app";
-import { Layout } from "./components/layout";
+import { Layout } from "./components/sidebar/layout";
 
 function App() {
   return (
@@ -7,10 +7,7 @@ function App() {
       <div>
         <Layout />
       </div>
-
       <ChatAppComponent />
-
-
     </div>
 
 );
