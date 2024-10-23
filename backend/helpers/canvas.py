@@ -65,7 +65,7 @@ class CanvasHelper:
 canvas = Canvas(CanvasHelper.API_URL, API_KEY)
 
 courses = CanvasHelper.get_favorite_courses(API_KEY)
-course = courses[2]
+course = courses[0]
 print(course)
 #files = CanvasHelper.get_files_from_course(course.id, API_KEY)
 #print(files)
@@ -82,8 +82,14 @@ for module in modules:
         print("     ",item, item.type)
         if hasattr(item, 'url'):
             print("     url: ", item.url)
+        if item.type == "File":
+            print("     ", item.__dict__)
+            file = canvas.get_file(item.content_id)
+            file.download(f"../files/{item.title}")
+            break
         if item.type == "ExternalUrl" :
             print("     url:",item.external_url)
+    break
 ## possible workflow for module items, we fetch all the items
 ##save file types
 ##the ones that have url params we fetch json, feed it to an ell function to get only relevant data
