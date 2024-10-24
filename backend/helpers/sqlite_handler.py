@@ -19,6 +19,13 @@ class SQLiteDBHandler:
                 )
             ''')
 
+            self.conn.execute('''
+            CREATE TABLE IF NOT EXISTS user (
+                user_id TEXT PRIMARY KEY,
+                api_key TEXT
+            )
+        ''')
+
     def insert_chat_history(self, user_id, course_id, chat_id, chat_history):
         try:
             with self.conn:
@@ -52,6 +59,25 @@ class SQLiteDBHandler:
         except Exception as e:
             print(f"Error during retrieval: {e}")
             return None
+        
+    ##retrieve all chat histories by user_id
+    def retrieve_all_chat_histories(self, user_id):
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute('''
+                SELECT chat_id, course_id, chat_history FROM chat_history
+                WHERE user_id = ?
+            ''', (user_id,))
+            results = cursor.fetchall()
+            if results:
+                ##print(f"Retrieved all chat histories for user_id: {user_id}")
+                return results  # Return the chat_history string
+            else:
+                ##print(f"No chat history found for user_id: {user_id}")
+                return None
+        except Exception as e:
+            print(f"Error during retrieval: {e}")
+            return
 
     def close(self):
         # Close the database connection

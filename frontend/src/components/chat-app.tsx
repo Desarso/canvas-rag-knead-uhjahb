@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
+import { v4 as uuidv4 } from 'uuid';
+
 import {
   Send,
 } from "lucide-react";
@@ -15,6 +17,8 @@ export function ChatAppComponent() {
   const [gettingResponse, setGettingResponse] = useState<boolean>(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [userId, setUserId] = useState<string>(""); // S
 
   const scrollToBottom = () => {
     window.scrollTo({
@@ -50,7 +54,7 @@ export function ChatAppComponent() {
       const url = new URL("http://127.0.0.1:8000/chat");
       url.searchParams.append("collection", "test");
       url.searchParams.append("chat_id", "chat87");
-      url.searchParams.append("user_id", "46456456");
+      url.searchParams.append("user_id", userId);
       url.searchParams.append("message", input);
 
       try {
@@ -103,6 +107,28 @@ export function ChatAppComponent() {
       setGettingResponse(false);
     }
   };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  
+  useEffect(() => {
+    // Check if user_id is already set in local storage
+    const storedUserId = localStorage.getItem('user_id');
+
+    // If user_id is not set, generate a new one and set it in local storage
+    if (!storedUserId) {
+      const newUserId = uuidv4(); // Generate a new UUID
+      localStorage.setItem('user_id', newUserId);
+      setUserId(newUserId); // Set the generated user ID to the state
+      console.log('user_id set:', newUserId);
+    } else {
+      setUserId(storedUserId); // Load the existing user ID into the state
+      console.log('user_id already exists:', storedUserId);
+    }
+  }, []);
+
 
   return (
     <div className="flex h-screen w-full bg-white overflow-auto">
