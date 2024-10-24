@@ -115,7 +115,7 @@ export function ChatAppComponent() {
 
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col mx-0 sm:mx-0 md:mx-[5%] lg:mx-[20%]">
-        <div className="flex-1 p-4 space-y-4">
+        <div className="flex-1 p-4 space-y-4 max-sm:mt-[25%] max-md:mt-[10%] max-lg:mt-[10%] mt-[10%]">
           {messages.map((message, index) => (
             <Card
               key={index}

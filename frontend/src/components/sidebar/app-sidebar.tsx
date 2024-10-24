@@ -12,6 +12,7 @@ import {
 
 import { SidebarButton } from "./sidebar-button"
 import { useState } from "react"
+import { CreateChat } from "../create-chat/create-chat"
 
 export function AppSidebar() {
   const [selectedButton, setSelectedButton] = useState<number | null>(null)
@@ -45,10 +46,12 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarMenuButton className="mb-[28px]">
-            <span>New Chat</span>
-            <Plus />
-          </SidebarMenuButton>
+          <CreateChat>
+            <SidebarMenuButton className="mb-[28px]">
+              <span>New Chat</span>
+              <Plus />
+            </SidebarMenuButton>
+          </CreateChat>
           <SidebarGroupLabel>Chat History</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
