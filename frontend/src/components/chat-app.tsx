@@ -6,54 +6,74 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
-import {
-  Send,
-} from "lucide-react";
+import { Send } from "lucide-react";
 import { Message, TextContent } from "@/models/models";
+import { Chat } from "@/App";
 
-export function ChatAppComponent() {
+interface Props {
+  userId: string;
+  chats: Chat[];
+  selectedChat: string;
+}
+
+export function ChatAppComponent({ userId, chats, selectedChat }: Props) {
   const [gettingResponse, setGettingResponse] = useState<boolean>(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [userId, setUserId] = useState<string>(""); // S
+  const [collection, setCollection] = useState<string>("");
+  const [chatId, setChatId] = useState<string>("");
 
   const scrollToBottom = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
-      behavior: 'smooth',
-    })
-  }
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    scrollToBottom();
+  }, [messages]);
+
+  //when chats load set messages
+  useEffect(() => {
+    let chat = chats.find((chat) => chat.chat_id === selectedChat);
+    setCollection(chat?.collection || "");
+    setChatId(chat?.chat_id || "");
+    console.log("Selected Chat");
+    console.log(chat);
+    if (chat) {
+      console.log("Selected Chat");
+      console.log(chat.chat_history.store[selectedChat]);
+      if (!chat.chat_history.store[selectedChat]) {
+        chat.chat_history.store[selectedChat] = [];
+      }
+      let chat_history = chat.chat_history.store[selectedChat];
+      //remove system messages
+      chat_history = chat_history.filter((message) => message.role !== "system");
+      setMessages(chat_history);
+    }
+  }, [selectedChat]);
 
   const handleSend = async () => {
     if (gettingResponse) return;
     setGettingResponse(true);
 
-
     if (input.trim()) {
       const newMessage: Message = {
         role: "user",
-        content: [
-          {
-            type: "text",
-            text: input,
-          },
-        ],
+        content: input,
       };
 
-      setInput("")
+      setInput("");
 
       messages.push(newMessage);
 
       const url = new URL("http://127.0.0.1:8000/chat");
-      url.searchParams.append("collection", "test");
-      url.searchParams.append("chat_id", "chat87");
+      url.searchParams.append("collection", collection);
+      url.searchParams.append("chat_id", chatId);
       url.searchParams.append("user_id", userId);
       url.searchParams.append("message", input);
 
@@ -82,7 +102,6 @@ export function ChatAppComponent() {
         };
         messages.push(assistantMessage);
 
-
         // Read the stream
         while (true) {
           const { done, value } = await reader.read();
@@ -92,7 +111,6 @@ export function ChatAppComponent() {
           let stringChunk = decoder.decode(value, { stream: true });
           console.log("Received chunk:", stringChunk);
           (assistantMessage.content as String) += stringChunk;
-
 
           const updatedMessages = [...messages];
 
@@ -112,82 +130,63 @@ export function ChatAppComponent() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  
-  useEffect(() => {
-    // Check if user_id is already set in local storage
-    const storedUserId = localStorage.getItem('user_id');
-
-    // If user_id is not set, generate a new one and set it in local storage
-    if (!storedUserId) {
-      const newUserId = uuidv4(); // Generate a new UUID
-      localStorage.setItem('user_id', newUserId);
-      setUserId(newUserId); // Set the generated user ID to the state
-      console.log('user_id set:', newUserId);
-    } else {
-      setUserId(storedUserId); // Load the existing user ID into the state
-      console.log('user_id already exists:', storedUserId);
-    }
-  }, []);
-
-
   return (
     <div className="flex h-screen w-full bg-white overflow-auto">
       <div className="flex-1 flex flex-col mr-[28px] ">
-        
-      {/* Header */}
-      <header className="fixed top-0 bg-white pb-5 pt-1 pl-2 justify-left align-top w-full z-10">
-        <h1 className="text-xl font-semibold">Canvas RAG Chat</h1>
-      </header>
+        {/* Header */}
+        <header className="fixed top-0 bg-white pb-5 pt-1 pl-2 justify-left align-top w-full z-10">
+          <h1 className="text-xl font-semibold">Canvas RAG Chat</h1>
+        </header>
 
-      {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col mx-0 sm:mx-0 md:mx-[5%] lg:mx-[20%]">
-        <div className="flex-1 p-4 space-y-4 max-sm:mt-[25%] max-md:mt-[10%] max-lg:mt-[10%] mt-[10%]">
-          {messages.map((message, index) => (
-            <Card
-              key={index}
-              className={`p-4 max-w-[80%] ${
-                message.role === "user" ? "ml-auto bg-blue-100" : "bg-white"
-              }`}
-            >
-              <div className="flex items-start">
-                {message.role === "assistant" && (
-                  <Avatar className="mr-4">
-                    <AvatarImage
-                      src="/placeholder.svg?height=40&width=40"
-                      alt="AI"
-                    />
-                    <AvatarFallback>AI</AvatarFallback>
-                  </Avatar>
-                )}
-                <div>
-                  {message.role === "user"
-                    ? (message.content[0] as TextContent).text
-                    : 
-                    <ReactMarkdown>
-                       {message.content as string}
-                    </ReactMarkdown>
-                   }
+        {/* Main Chat Area */}
+        <div className="flex-1 flex flex-col mx-0 sm:mx-0 md:mx-[5%] lg:mx-[20%]">
+          <div className="flex-1 p-4 space-y-4 max-sm:mt-[25%] max-md:mt-[10%] max-lg:mt-[10%] mt-[10%]">
+            {messages.map((message, index) => (
+              <Card
+                key={index}
+                className={`p-4 max-w-[80%] ${
+                  message.role === "user" ? "ml-auto bg-blue-100" : "bg-white"
+                }`}
+              >
+                <div className="flex items-start">
+                  {message.role === "assistant" && (
+                    <Avatar className="mr-4">
+                      <AvatarImage
+                        src="/placeholder.svg?height=40&width=40"
+                        alt="AI"
+                      />
+                      <AvatarFallback>AI</AvatarFallback>
+                    </Avatar>
+                  )}
+                  <div>
+                    {message.role === "user"
+                      ? (message.content as string)
+                      : message.role === "assistant" && (
+                          <ReactMarkdown>
+                            {message.content as string}
+                          </ReactMarkdown>
+                        )}
+                  </div>
                 </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-        {/*Input area **/}
-        <div className="sticky bottom-0 left-0 right-0 p-4 border-t bg-white">
-          <div className="flex space-x-2">
-            <Input
-              value={input}
-              onInput={(e) => setInput((e.target as HTMLInputElement).value)}
-              placeholder="Type your message here..."
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            />
-            <Button onClick={handleSend}>
-              <Send className="h-4 w-4" />
-            </Button>
+              </Card>
+            ))}
+          </div>
+          {/*Input area **/}
+          <div className="sticky bottom-0 left-0 right-0 p-4 border-t bg-white">
+            <div className="flex space-x-2">
+              <Input
+                value={input}
+                onInput={(e) => setInput((e.target as HTMLInputElement).value)}
+                placeholder="Type your message here..."
+                onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              />
+              <Button onClick={handleSend}>
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }

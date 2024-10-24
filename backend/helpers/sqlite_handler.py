@@ -3,6 +3,8 @@ import sqlite3
 class SQLiteDBHandler:
     def __init__(self, db_file='chat_history.db'):
         # Initialize the SQLite database connection
+        ##create file if it doesn't exist
+        open(db_file, 'a').close()
         self.conn = sqlite3.connect(db_file)
         self.create_tables()
 
@@ -12,10 +14,10 @@ class SQLiteDBHandler:
             self.conn.execute('''
                 CREATE TABLE IF NOT EXISTS chat_history (
                     user_id TEXT,
-                    course_id TEXT,
+                    collection TEXT,
                     chat_id TEXT,
                     chat_history TEXT,
-                    PRIMARY KEY (user_id, course_id, chat_id)
+                    PRIMARY KEY (user_id, collection, chat_id)
                 )
             ''')
 
@@ -26,29 +28,29 @@ class SQLiteDBHandler:
             )
         ''')
 
-    def insert_chat_history(self, user_id, course_id, chat_id, chat_history):
+    def insert_chat_history(self, user_id, collection, chat_id, chat_history):
         try:
             with self.conn:
                 # Delete old chat history if it exists
-                self.conn.execute('DELETE FROM chat_history WHERE user_id = ? AND course_id = ? AND chat_id = ?',
-                                  (user_id, course_id, chat_id))
+                self.conn.execute('DELETE FROM chat_history WHERE user_id = ? AND collection = ? AND chat_id = ?',
+                                  (user_id, collection, chat_id))
 
                 # Insert the new chat history
                 self.conn.execute('''
-                    INSERT INTO chat_history (user_id, course_id, chat_id, chat_history)
+                    INSERT INTO chat_history (user_id, collection, chat_id, chat_history)
                     VALUES (?, ?, ?, ?)
-                ''', (user_id, course_id, chat_id, chat_history))
+                ''', (user_id, collection, chat_id, chat_history))
                 ##print(f"Inserted chat history for chat_id: {chat_id}")
         except Exception as e:
             print(f"Error during insertion: {e}")
 
-    def retrieve_chat_history(self, user_id, course_id, chat_id):
+    def retrieve_chat_history(self, user_id, collection, chat_id):
         try:
             cursor = self.conn.cursor()
             cursor.execute('''
                 SELECT chat_history FROM chat_history
-                WHERE user_id = ? AND course_id = ? AND chat_id = ?
-            ''', (user_id, course_id, chat_id))
+                WHERE user_id = ? AND collection = ? AND chat_id = ?
+            ''', (user_id, collection, chat_id))
             result = cursor.fetchone()
             if result:
                 ##print(f"Retrieved chat history for chat_id: {chat_id}")
@@ -65,7 +67,7 @@ class SQLiteDBHandler:
         try:
             cursor = self.conn.cursor()
             cursor.execute('''
-                SELECT chat_id, course_id, chat_history FROM chat_history
+                SELECT chat_id, collection, chat_history FROM chat_history
                 WHERE user_id = ?
             ''', (user_id,))
             results = cursor.fetchall()
@@ -78,6 +80,15 @@ class SQLiteDBHandler:
         except Exception as e:
             print(f"Error during retrieval: {e}")
             return
+
+    def delete_chat(self, user_id, chat_id):
+        try:
+            with self.conn:
+                self.conn.execute('DELETE FROM chat_history WHERE user_id = ? AND chat_id = ?',
+                                  (user_id, chat_id))
+                ##print(f"Deleted chat history for chat_id: {chat_id}")
+        except Exception as e:
+            print(f"Error during deletion: {e}")
 
     def close(self):
         # Close the database connection
