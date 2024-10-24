@@ -19,6 +19,13 @@ class SQLiteDBHandler:
                 )
             ''')
 
+            self.conn.execute('''
+            CREATE TABLE IF NOT EXISTS user (
+                user_id TEXT PRIMARY KEY,
+                api_key TEXT
+            )
+        ''')
+
     def insert_chat_history(self, user_id, course_id, chat_id, chat_history):
         try:
             with self.conn:
