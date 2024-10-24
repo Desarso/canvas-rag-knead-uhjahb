@@ -17,6 +17,21 @@ interface CreateChatProps {
     children: ReactNode
   }
 
+const dummyData = [
+  {
+    name: "Syllabus", 
+    type: "pdf"
+  },
+  {
+    name: "Required Reading 10/23/24", 
+    type: "pdf"
+  },
+  {
+    name: "Lecture Notes 10/21/24", 
+    type: "pdf"
+  },
+]
+
 export function CreateChat({children} : CreateChatProps) {
   return (
     <Dialog>
@@ -31,11 +46,13 @@ export function CreateChat({children} : CreateChatProps) {
           </DialogDescription>
         </DialogHeader>
         <div className="flex">
+
             <CourseSelect />
+            
             <div className="container mx-auto p-0 ml-10">
-              <DataTable columns={columns} data={[]} />
-            <div/>
-    </div>
+              <DataTable columns={columns} data={dummyData} />
+            </div>
+
         </div>
         
         <DialogFooter className="h-[10%]">
