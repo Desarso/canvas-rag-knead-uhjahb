@@ -83,18 +83,22 @@ def chat_stream(collection: str, chat_id: str, user_id: str, message: str):
 
 @app.post("/chat")
 def chat(collection: str, chat_id: str, message: str,  user_id: str):
-    print(collection, chat_id, message, user_id)
+    # print(collection, chat_id, message, user_id)
     return StreamingResponse(chat_stream(collection, chat_id, user_id, message), media_type="text/event-stream")
 
 @app.get("/chats")
 def get_chats(user_id: str):
+    print(user_id)
     handler = SQLiteDBHandler()
     raw_chat_histories = handler.retrieve_all_chat_histories(user_id)
+    # print(raw_chat_histories)
     
+    #print(raw_chat_histories)
     parsed_chat_histories = []
 
     for chat in raw_chat_histories:
         chat_id = chat[0]
+        collection = chat[1]
         chat_history_json = chat[2]  
         
         # Ensure chat_history_json is not empty or invalid
@@ -112,12 +116,20 @@ def get_chats(user_id: str):
         # Append parsed data to the result list
         parsed_chat_histories.append({
             "chat_id": chat_id,
+            "collection": collection,
             "chat_history": chat_history_data
         })
     
     # Return parsed data
     return parsed_chat_histories
 
+
+@app.delete("/chat")
+def delete_chat(user_id: str, chat_id: str):
+    handler = SQLiteDBHandler()
+    handler.delete_chat(user_id, chat_id)
+    ##don't delete collection, we can keep the collection for future reference
+    return "Chat deleted successfully"
 
 ##creating collections, each course from canvas will get it's own collection
 ##we should create this collections on user sign-up, for right now easiest solution is hard download every course to a dir in data
