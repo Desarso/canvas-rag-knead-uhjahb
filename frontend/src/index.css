@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* .markdown code {
+.markdown code {
   display: block;
   white-space: pre-wrap;
 }
@@ -89,4 +89,4 @@
   body {
     @apply bg-background text-foreground;
   }
-} */
+}

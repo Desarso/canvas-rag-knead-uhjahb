@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,8 +9,6 @@ import ReactMarkdown from "react-markdown";
 import { v4 as uuidv4 } from 'uuid';
 
 import {
-  Menu,
-  PlusCircle,
   Send,
 } from "lucide-react";
 import { Message, TextContent } from "@/models/models";
@@ -21,6 +19,17 @@ export function ChatAppComponent() {
   const [input, setInput] = useState<string>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [userId, setUserId] = useState<string>(""); // S
+
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   const handleSend = async () => {
     if (gettingResponse) return;
@@ -122,44 +131,17 @@ export function ChatAppComponent() {
 
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div
-        className={`bg-gray-900 text-white transition-all duration-300 ${
-          isSidebarOpen ? "w-64" : "w-0"
-        }`}
-      >
-        <div className="p-4">
-          <Button variant="outline" className="w-full mb-4">
-            <PlusCircle className="mr-2 h-4 w-4" />
-            New chat
-          </Button>
-          <div className="space-y-2">
-            {["Chat 1", "Chat 2", "Chat 3"].map((chat, index) => (
-              <Button
-                key={index}
-                variant="ghost"
-                className="w-full justify-start"
-              >
-                {chat}
-              </Button>
-            ))}
-          </div>
-        </div>
-      </div>
+    <div className="flex h-screen w-full bg-white overflow-auto">
+      <div className="flex-1 flex flex-col mr-[28px] ">
+        
+      {/* Header */}
+      <header className="fixed top-0 bg-white pb-5 pt-1 pl-2 justify-left align-top w-full z-10">
+        <h1 className="text-xl font-semibold">Canvas RAG Chat</h1>
+      </header>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="bg-white border-b p-4 flex items-center justify-between">
-          <Button variant="ghost" size="icon" onClick={toggleSidebar}>
-            <Menu className="h-6 w-6" />
-          </Button>
-          <h1 className="text-xl font-semibold">ChatGPT Clone</h1>
-          <div className="w-6" /> {/* Placeholder for symmetry */}
-        </header>
-
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 flex flex-col mx-0 sm:mx-0 md:mx-[5%] lg:mx-[20%]">
+        <div className="flex-1 p-4 space-y-4 max-sm:mt-[25%] max-md:mt-[10%] max-lg:mt-[10%] mt-[10%]">
           {messages.map((message, index) => (
             <Card
               key={index}
@@ -191,7 +173,7 @@ export function ChatAppComponent() {
           ))}
         </div>
         {/*Input area **/}
-        <div className="p-4 border-t">
+        <div className="sticky bottom-0 left-0 right-0 p-4 border-t bg-white">
           <div className="flex space-x-2">
             <Input
               value={input}
@@ -205,6 +187,7 @@ export function ChatAppComponent() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
