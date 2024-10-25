@@ -27,7 +27,7 @@ class CanvasHelper:
 
     @staticmethod
     def download_files_from_course(id: str):
-        base_directory = '../data'
+        base_directory = './data'
         canvas = Canvas(CanvasHelper.API_URL, API_KEY)
         
         if not os.path.exists(base_directory):
@@ -41,19 +41,16 @@ class CanvasHelper:
         else:
             print(f"Folder for course {id} already exists")
             return
-        files = CanvasHelper.get_files_from_course(id, API_KEY)        
-        session = canvas._Canvas__requester._session # authorize the download w/ canvas api
+        files = CanvasHelper.get_files_from_course(id, API_KEY) 
+        print("Files: ")
+        for file in files:  
+            print(file)       
         
         for file in files:
+            print(file)
             file_path = os.path.join(course_directory, file['display_name'])
-            response = session.get(file['url'], stream=True)
-            
-            if response.status_code == 200:
-                with open(file_path, 'wb') as f:
-                    f.write(response.content)
-                print(f"Downloaded: {file['display_name']}")
-            else:
-                print(f"Failed to download {file['display_name']}")
+            file.download(file_path)
+            print(f"Downloaded file: {file['display_name']}")
 
                 
 
@@ -90,15 +87,20 @@ class CanvasHelper:
     def get_files_from_course(id: str, api_key: str = API_KEY):
         canvas = Canvas(CanvasHelper.API_URL, api_key)
         course = canvas.get_course(id)
-        files = course.get_files()
-        parsed_files = []
-        for file in files:
-            parsed_files.append({
-                "file_id": file.id,
-                "display_name": file.display_name,
-                "url": file.url
-            })
-        return parsed_files
+        try :
+            files = course.get_files()
+            parsed_files = []
+            for file in files:
+                parsed_files.append({
+                    "file_id": file.id,
+                    "display_name": file.display_name,
+                    "url": file.url
+                })
+            return parsed_files
+        except Exception as e:
+            print(f"Error fetching files: {e}")
+            return None
+        
     
     @staticmethod
     def get_module_text_from_course(course_id: str, api_key):
