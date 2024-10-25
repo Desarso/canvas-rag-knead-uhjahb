@@ -26,11 +26,10 @@ export function ChatAppComponent({ userId, chats, selectedChat }: Props) {
   const [collection, setCollection] = useState<string>("");
   const [chatId, setChatId] = useState<string>("");
 
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
+
   const scrollToBottom = () => {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    });
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -171,6 +170,7 @@ export function ChatAppComponent({ userId, chats, selectedChat }: Props) {
                 </div>
               </Card>
             ))}
+            <div ref={chatEndRef} />
           </div>
           {/*Input area **/}
           {selectedChat != "" ? <div className="sticky bottom-0 left-0 right-0 p-4 border-t bg-white">

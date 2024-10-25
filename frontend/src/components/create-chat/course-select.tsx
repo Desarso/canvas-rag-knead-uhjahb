@@ -55,15 +55,24 @@ export function CourseSelect({ userId, course, setSelectedCourse }: Props) {
     fetchCourses(userId);
   }, []);
 
+  const [course_state, setSelectedCourseState] = useState<Course>();
+  const handleCourseSelect = (courseId: string) => {
+    const selected = courses.find(course => course.course_id === courseId);
+    if (selected) {
+      setSelectedCourseState(selected);
+      setSelectedCourse(courseId); // Pass the selected course ID back up
+    }
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">Course Select</Button>
+        <Button variant="outline">{course_state ? course_state.course_code : "Select Course"}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>Courses</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup value={course} onValueChange={setSelectedCourse}>
+        <DropdownMenuRadioGroup value={course} onValueChange={handleCourseSelect}>
           {courses.map((course) => (
             <DropdownMenuRadioItem
               key={course.course_id}

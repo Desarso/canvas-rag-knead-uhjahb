@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { CourseSelect } from "./course-select";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
@@ -27,20 +27,48 @@ interface FileData {
 
 export function CreateChat({ children, userId, setUserId}: Props) {
   const [selectedCourse, setSelectedCourse] = useState<string>("");
-  const [fileData, setFileData] = useState<FileData[]>([
-    {
-      id: 0,
-      filename: "Syllabus.pdf",
-    },
-    {
-      id: 1,
-      filename: "Required Reading 10-23-24.pdf",
-    },
-    {
-      id: 2,
-      filename: "Lecture Notes 10-21-24.pdf",
-    },
-  ]);
+  const [fileData, setFileData] = useState<FileData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const populateFileList = async () => {
+    if (userId === "" || selectedCourse === "") return;
+    
+    setLoading(true);
+
+    try {
+      const url = new URL("http://127.0.0.1:8000/get_course_files");
+      url.searchParams.append("user_id", userId);
+      url.searchParams.append("course_id", selectedCourse);
+      console.log(url);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching files: ${response.statusText}`);
+      }
+
+      let filedata = await response.json();
+      filedata = filedata.map((file: any) => ({
+        id: file.file_id,
+        filename: file.display_name,
+      }));
+
+      setFileData(filedata)
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false); // Hide loading screen
+    }
+  }
+
+  useEffect(() => {
+    populateFileList();
+  }, [selectedCourse]);
 
   const handleCreateChat = async () => {
     if (userId === "") return;
@@ -90,11 +118,19 @@ export function CreateChat({ children, userId, setUserId}: Props) {
           />
 
           <div className="container mx-auto p-0 ml-10">
-            <DataTable
-              columns={columns}
-              data={fileData}
-              setData={setFileData}
-            />
+            <div className={selectedCourse ? "h-full max-h-[400px] overflow-y-auto" : ""}>
+              {!loading ? (<DataTable
+                columns={columns}
+                data={fileData}
+                setData={populateFileList}
+              />) : ( 
+              <div className="flex justify-center items-center h-full">
+                <DialogDescription>
+                  Loading...
+                </DialogDescription>
+              </div>
+            )}
+            </div>
           </div>
         </div>
 

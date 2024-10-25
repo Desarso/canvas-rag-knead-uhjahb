@@ -185,6 +185,11 @@ def get_courses(user_id: str):
     ##get courses from canvas
     return CanvasHelper.get_courses_for_frontend()
 
+@app.get("/get_course_files")
+def get_course_files(user_id: str, course_id: str):
+    handler = SQLiteDBHandler()
+    return CanvasHelper.get_files_from_course(course_id)
+
 ##creating collections, each course from canvas will get it's own collection
 ##we should create this collections on user sign-up, for right now easiest solution is hard download every course to a dir in data
 ##then create a collection of the same name, we can alternatively give the user the option to create a collection for certain classes
