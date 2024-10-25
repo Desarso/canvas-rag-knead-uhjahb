@@ -92,6 +92,7 @@ function App() {
       <div>
         <Layout 
         userId={userId} 
+        setUserId={setUserId}
         chats={chats}
         setSelectedChat={setSelectedChat}
         setChats={setChats}

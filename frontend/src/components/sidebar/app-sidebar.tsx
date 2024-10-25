@@ -17,12 +17,13 @@ import { Chat } from "@/App";
 import { Link } from "react-router-dom";
 interface Props {
   userId: string;
+  setUserId: (userId: string) => void;
   setSelectedChat: (chatId: string) => void;
   chats: Chat[];
   setChats: (chats: Chat[]) => void;
 }
 
-export function AppSidebar({ userId, setSelectedChat, chats, setChats  }: Props) {
+export function AppSidebar({ userId,setUserId, setSelectedChat, chats, setChats  }: Props) {
   const [selectedButton, setSelectedButton] = useState<number | null>(null);
 
   // set the clicked button as the selected one
@@ -72,7 +73,10 @@ export function AppSidebar({ userId, setSelectedChat, chats, setChats  }: Props)
                 <span>Home</span>
             </SidebarMenuButton>
           </Link>
-          <CreateChat>
+          <CreateChat
+            userId={userId}
+            setUserId={setUserId}
+          >
             <SidebarMenuButton className="mb-[28px]">
               <Plus />
               <span>New Chat</span>

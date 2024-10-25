@@ -5,13 +5,14 @@ import { Chat } from "@/App";
 
 interface Props {
   userId: string;
+  setUserId: (userId: string) => void;
   setSelectedChat: (chatId: string) => void;
   chats: Chat[];
   setChats: (chats: Chat[]) => void;
 }
 
 export const Layout = (
- { userId, setSelectedChat, chats, setChats }: Props
+ { userId, setUserId, setSelectedChat, chats, setChats }: Props
 ) => {
   const [open, setOpen] = useState(true)
 
@@ -21,6 +22,7 @@ export const Layout = (
     <SidebarProvider open={open} onOpenChange={setOpen}>
       <AppSidebar
         userId={userId}
+        setUserId={setUserId}
         setSelectedChat={setSelectedChat}
         chats={chats}
         setChats={setChats}
