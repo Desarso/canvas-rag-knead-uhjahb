@@ -150,7 +150,8 @@ def add_api_key(user_id: str, api_key: str):
 def create_chat(user_id: str, chat_id: str, course_id: str):
     ##first thing is check if the collection name exists, if not we create it, by downloading all files from the course
     ##then we create an empty chat history
-    if ChatEngine.does_collection_exist(course_id):
+    chat_engine = ChatEngine()
+    if chat_engine.does_collection_exist(course_id):
         ##collection exists
         handler = SQLiteDBHandler()
         handler.insert_chat_history(
@@ -160,8 +161,7 @@ def create_chat(user_id: str, chat_id: str, course_id: str):
             chat_history= "{}")
     else:
         ##collection does not exist
-        chat_engine_instance = ChatEngine()
-        chat_engine_instance.create_collection_from_course_id(course_id)
+        chat_engine.create_collection_from_course_id(course_id)
         handler = SQLiteDBHandler()
         handler.insert_chat_history(
             user_id=user_id, 
@@ -176,11 +176,11 @@ def create_chat(user_id: str, chat_id: str, course_id: str):
 @app.get("/get_courses")
 def get_courses(user_id: str):
     handler = SQLiteDBHandler()
-    api_key = handler.retrieve_api_key(user_id)
-    if not api_key:
-        return "No API Key found for user"
+    # api_key = handler.retrieve_api_key(user_id)
+    # if not api_key:
+    #     return "No API Key found for user"
     ##get courses from canvas
-    return CanvasHelper.get_courses_for_frontend(api_key)
+    return CanvasHelper.get_courses_for_frontend()
 
 ##creating collections, each course from canvas will get it's own collection
 ##we should create this collections on user sign-up, for right now easiest solution is hard download every course to a dir in data

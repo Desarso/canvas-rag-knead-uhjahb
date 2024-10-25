@@ -26,6 +26,7 @@ class CanvasHelper:
     @staticmethod
     def download_files_from_course(id: str):
         base_directory = '../data'
+        canvas = Canvas(CanvasHelper.API_URL, API_KEY)
         
         if not os.path.exists(base_directory):
             os.makedirs(base_directory)
@@ -56,7 +57,7 @@ class CanvasHelper:
 
     ##get's all enrolled courses from api key
     @staticmethod
-    def get_favorite_courses(api_key: str):
+    def get_favorite_courses(api_key: str = API_KEY):
         canvas = Canvas(CanvasHelper.API_URL, api_key)
         user = canvas.get_user('self')
         courses = user.get_courses(enrollment_status='active',include =['favorites'])
@@ -69,19 +70,22 @@ class CanvasHelper:
         return favorite_courses
     
     @staticmethod
-    def get_courses_for_frontend(api_key: str):
+    def get_courses_for_frontend(api_key: str = API_KEY):
+    
         courses = CanvasHelper.get_favorite_courses(api_key)
         parsed = []
         for course in courses:
+            #print(course.__dict__)
             parsed.append({
                 "course_id": course.id,
                 "course_name": course.name,
+                "course_code": course.course_code,
             })
         return parsed
     
 
     @staticmethod
-    def get_files_from_course(id: str, api_key):
+    def get_files_from_course(id: str, api_key: str = API_KEY):
         canvas = Canvas(CanvasHelper.API_URL, api_key)
         course = canvas.get_course(id)
         files = course.get_files()
@@ -97,43 +101,43 @@ class CanvasHelper:
 
 
 
-##for testing
-canvas = Canvas(CanvasHelper.API_URL, API_KEY)
+# ##for testing
+# canvas = Canvas(CanvasHelper.API_URL, API_KEY)
 
-courses = CanvasHelper.get_favorite_courses(API_KEY)
-course = courses[0]
-# print(course)
-# #files = CanvasHelper.get_files_from_course(course.id, API_KEY)
-# #print(files)
-modules = course.get_modules()
-# items = modules[0].get_module_items()
-#print(items[0])
+# courses = CanvasHelper.get_favorite_courses(API_KEY)
+# course = courses[0]
+# # print(course)
+# # #files = CanvasHelper.get_files_from_course(course.id, API_KEY)
+# # #print(files)
+# modules = course.get_modules()
+# # items = modules[0].get_module_items()
+# #print(items[0])
 
-# CanvasHelper.download_files_from_course('122492')
-# print("done")
+# # CanvasHelper.download_files_from_course('122492')
+# # print("done")
 
-index = 1
-for module in modules:
-    items = module.get_module_items()
-    print("MODULE: ",index, module.name)
-    index+=1
-    for item in items:
-        print("     ",item, item.type)
-        if hasattr(item, 'url'):
-            print("     url: ", item.url)
-            try:
-                response = requests.get(item.url, headers=headers)
-                response.raise_for_status()  # Check for any request errors
-                print("     ", response.json())
-            except requests.exceptions.RequestException as e:
-                print(f"Error fetching URL: {e}")
-        if item.type == "File":
-            print("     ", item.__dict__)
-            file = canvas.get_file(item.content_id)
-            file.download(f"../files/{item.title}")
-            break
-        if item.type == "ExternalUrl" :
-            print("     url:",item.external_url)
+# index = 1
+# for module in modules:
+#     items = module.get_module_items()
+#     print("MODULE: ",index, module.name)
+#     index+=1
+#     for item in items:
+#         print("     ",item, item.type)
+#         if hasattr(item, 'url'):
+#             print("     url: ", item.url)
+#             try:
+#                 response = requests.get(item.url, headers=headers)
+#                 response.raise_for_status()  # Check for any request errors
+#                 print("     ", response.json())
+#             except requests.exceptions.RequestException as e:
+#                 print(f"Error fetching URL: {e}")
+#         if item.type == "File":
+#             print("     ", item.__dict__)
+#             file = canvas.get_file(item.content_id)
+#             file.download(f"../files/{item.title}")
+#             break
+#         if item.type == "ExternalUrl" :
+#             print("     url:",item.external_url)
 
 ## possible workflow for module items, we fetch all the items
 ##save file types
