@@ -27,7 +27,7 @@ class CanvasHelper:
 
     @staticmethod
     def download_files_from_course(id: str):
-        base_directory = '../data'
+        base_directory = './data'
         canvas = Canvas(CanvasHelper.API_URL, API_KEY)
         
         if not os.path.exists(base_directory):

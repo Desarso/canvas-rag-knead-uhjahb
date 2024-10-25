@@ -12,6 +12,7 @@ pip install llama-index-embeddings-instructor
 pip install chromadb
 pip install llama-index-vector-stores-chroma
 pip install boltdb
+pip install openpyxl
 
 ##for tooling later
 pip install -U ell-ai
