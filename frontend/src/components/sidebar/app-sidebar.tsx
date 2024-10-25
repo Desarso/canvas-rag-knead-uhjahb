@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Home, Plus } from "lucide-react";
 
 import {
   Sidebar,
@@ -14,6 +14,7 @@ import { SidebarButton } from "./sidebar-button";
 import { useState } from "react";
 import { CreateChat } from "../create-chat/create-chat";
 import { Chat } from "@/App";
+import { Link } from "react-router-dom";
 interface Props {
   userId: string;
   setSelectedChat: (chatId: string) => void;
@@ -65,10 +66,16 @@ export function AppSidebar({ userId, setSelectedChat, chats, setChats  }: Props)
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
+          <Link to="/">
+            <SidebarMenuButton>
+                <Home />
+                <span>Home</span>
+            </SidebarMenuButton>
+          </Link>
           <CreateChat>
             <SidebarMenuButton className="mb-[28px]">
-              <span>New Chat</span>
               <Plus />
+              <span>New Chat</span>
             </SidebarMenuButton>
           </CreateChat>
           <SidebarGroupLabel>Chat History</SidebarGroupLabel>

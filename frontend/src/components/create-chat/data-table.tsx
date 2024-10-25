@@ -13,21 +13,38 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Button } from "../ui/button"
+import { Trash } from "lucide-react"
+
+interface FileData {
+  id: number;
+  filename: string;
+}
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  setData: React.Dispatch<React.SetStateAction<{
+    id: number;
+    filename: string;
+  }[]>>
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends FileData, TValue>({
   columns,
   data,
+  setData,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  const deleteFile = (id: number) => {
+    setData((prevData) => prevData.filter((file) => file.id !== id))
+  }
 
   return (
     <div className="rounded-md border">
@@ -62,12 +79,17 @@ export function DataTable<TData, TValue>({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
+                <TableCell className="text-right">
+                <Button variant="ghost" onClick={() => deleteFile(row.original.id)}>
+                    <Trash className="text-red-600"/>
+                  </Button>
+                </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                Select a course.
               </TableCell>
             </TableRow>
           )}
