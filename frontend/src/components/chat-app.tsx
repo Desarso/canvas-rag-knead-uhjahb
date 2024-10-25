@@ -135,7 +135,7 @@ export function ChatAppComponent({ userId, chats, selectedChat }: Props) {
       <div className="flex-1 flex flex-col mr-[28px] ">
         {/* Header */}
         <header className="fixed top-0 bg-white pb-5 pt-1 pl-2 justify-left align-top w-full z-10">
-          <h1 className="text-xl font-semibold">Canvas RAG Chat</h1>
+          <h1 className="text-xl font-semibold">Compass</h1>
         </header>
 
         {/* Main Chat Area */}
