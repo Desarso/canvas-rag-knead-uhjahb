@@ -16,6 +16,7 @@ from llama_index.core.storage.chat_store import SimpleChatStore
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.chat_engine import CondenseQuestionChatEngine
 import os
+from helpers.canvas import CanvasHelper
 from dotenv import load_dotenv
 
 if __name__ != "__main__":
@@ -65,6 +66,35 @@ class ChatEngine:
             documents=documents,
             storage_context=storage_context
         )
+
+
+    def create_collection_from_course_id(self, course_id: str):
+        ##first we check if folder exists
+        base_directory = '../data'
+        course_directory = os.path.join(base_directory, course_id)
+        if not os.path.exists(course_directory):
+            print("Folder does not exist")
+            ##we download the files using the canvas helper
+            CanvasHelper.download_files_from_course(course_id)
+            ##then check if the folder exists
+            if os.path.exists(course_directory):
+                print("Folder created")
+                self.create_collection(course_id, course_directory)
+            else:
+                print("Folder not created")
+            return
+        else:
+            print("Folder exists")
+            self.create_collection(course_id, course_directory)
+            return
+        
+
+    def does_collection_exist(self, name: str):
+        return name in self.db.list_collections()
+
+    def files_in_collection(self, name: str):
+        chroma_collection = self.db.get_or_create_collection(name)
+        return chroma_collection
 
     def chat_stream(self, message: str, collection: str, chat_id: str, user_id: str = "user1"):
         chroma_collection = self.db.get_or_create_collection(collection)

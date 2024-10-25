@@ -3,6 +3,7 @@ from canvasapi import Canvas
 from datetime import datetime
 from dotenv import load_dotenv
 import os
+import requests
 
 load_dotenv()
 
@@ -13,6 +14,10 @@ load_dotenv()
 # # Canvas API key
 API_KEY = os.getenv("CANVAS_API")
 
+# Set up the headers with the API key
+headers = {
+    'Authorization': f'Bearer {API_KEY}'
+}
  
 class CanvasHelper:
 
@@ -97,17 +102,17 @@ canvas = Canvas(CanvasHelper.API_URL, API_KEY)
 
 courses = CanvasHelper.get_favorite_courses(API_KEY)
 course = courses[0]
-print(course)
-#files = CanvasHelper.get_files_from_course(course.id, API_KEY)
-#print(files)
+# print(course)
+# #files = CanvasHelper.get_files_from_course(course.id, API_KEY)
+# #print(files)
 modules = course.get_modules()
-items = modules[0].get_module_items()
+# items = modules[0].get_module_items()
 #print(items[0])
 
-CanvasHelper.download_files_from_course('122492')
-print("done")
+# CanvasHelper.download_files_from_course('122492')
+# print("done")
 
-"""index = 1
+index = 1
 for module in modules:
     items = module.get_module_items()
     print("MODULE: ",index, module.name)
@@ -116,13 +121,20 @@ for module in modules:
         print("     ",item, item.type)
         if hasattr(item, 'url'):
             print("     url: ", item.url)
+            try:
+                response = requests.get(item.url, headers=headers)
+                response.raise_for_status()  # Check for any request errors
+                print("     ", response.json())
+            except requests.exceptions.RequestException as e:
+                print(f"Error fetching URL: {e}")
         if item.type == "File":
             print("     ", item.__dict__)
             file = canvas.get_file(item.content_id)
             file.download(f"../files/{item.title}")
             break
         if item.type == "ExternalUrl" :
-            print("     url:",item.external_url)"""
+            print("     url:",item.external_url)
+
 ## possible workflow for module items, we fetch all the items
 ##save file types
 ##the ones that have url params we fetch json, feed it to an ell function to get only relevant data

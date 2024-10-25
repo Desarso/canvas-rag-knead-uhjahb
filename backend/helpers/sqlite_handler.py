@@ -90,6 +90,40 @@ class SQLiteDBHandler:
         except Exception as e:
             print(f"Error during deletion: {e}")
 
+    def insert_api_key(self, user_id, api_key):
+        try:
+            with self.conn:
+                # Delete old api key if it exists
+                self.conn.execute('DELETE FROM user WHERE user_id = ?',
+                                  (user_id,))
+
+                # Insert the new api key
+                self.conn.execute('''
+                    INSERT INTO user (user_id, api_key)
+                    VALUES (?, ?)
+                ''', (user_id, api_key))
+                ##print(f"Inserted api key for user_id: {user_id}")
+        except Exception as e:
+            print(f"Error during insertion: {e}")
+
+    def retrieve_api_key(self, user_id):
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute('''
+                SELECT api_key FROM user
+                WHERE user_id = ?
+            ''', (user_id,))
+            result = cursor.fetchone()
+            if result:
+                ##print(f"Retrieved api key for user_id: {user_id}")
+                return result[0]  # Return the api key string
+            else:
+                ##print(f"No api key found for user_id: {user_id}")
+                return None
+        except Exception as e:
+            print(f"Error during retrieval: {e}")
+            return
+
     def close(self):
         # Close the database connection
         if self.conn:
