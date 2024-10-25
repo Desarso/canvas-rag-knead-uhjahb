@@ -2,6 +2,7 @@
 from canvasapi import Canvas
 from datetime import datetime
 from dotenv import load_dotenv
+from bs4 import BeautifulSoup
 import requests
 import os
 
@@ -129,21 +130,29 @@ for module in modules:
     index += 1
     for item in items:
         print("     ", item, item.type)
-        if hasattr(item, 'url'):
+        #if hasattr(item, 'url'):
+        if item.type == "Page":
             print("url:", item.url)
             try:
                 response = requests.get(item.url, headers=headers)
                 response.raise_for_status()  # Check for any request errors
-                print("     ", response.json())
+                json_data = response.json()
+                if 'body' in json_data:
+                    text = json_data['body']
+
+                    soup = BeautifulSoup(text, 'html.parser')
+                    text = soup.get_text()
+                #print("     ", response.json().get('body'))
+                print("     ", text)
             except requests.exceptions.RequestException as e:
                 print(f"Error fetching URL: {e}")
-        if item.type == "File":
+        """if item.type == "File":
             print("     ", item.__dict__)
             file = canvas.get_file(item.content_id)
             file.download(f"files/{item.title}")
             break
         if item.type == "ExternalUrl":
-            print("url:", item.external_url)
+            print("url:", item.external_url)"""
 
 
 
