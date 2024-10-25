@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { CourseSelect } from "./course-select";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
@@ -17,22 +17,26 @@ interface CreateChatProps {
     children: ReactNode
   }
 
-const dummyData = [
-  {
-    name: "Syllabus", 
-    type: "pdf"
-  },
-  {
-    name: "Required Reading 10/23/24", 
-    type: "pdf"
-  },
-  {
-    name: "Lecture Notes 10/21/24", 
-    type: "pdf"
-  },
-]
+  interface FileData {
+    id: number;
+    filename: string;
+  } 
 
 export function CreateChat({children} : CreateChatProps) {
+  const [fileData, setFileData] = useState<FileData[]>([
+    {
+      id: 0,
+      filename: "Syllabus.pdf"
+    },
+    {
+      id: 1,
+      filename: "Required Reading 10-23-24.pdf"
+    },
+    {
+      id: 2,
+      filename: "Lecture Notes 10-21-24.pdf"
+    },
+  ])
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -50,7 +54,7 @@ export function CreateChat({children} : CreateChatProps) {
             <CourseSelect />
             
             <div className="container mx-auto p-0 ml-10">
-              <DataTable columns={columns} data={dummyData} />
+              <DataTable columns={columns} data={fileData} setData={setFileData}/>
             </div>
 
         </div>
