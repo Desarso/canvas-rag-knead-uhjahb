@@ -3,7 +3,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 def download_and_save_text(url: str, output_file: str, class_number: str):
-    folder_path = os.path.join(os.getcwd(), "../data", class_number)
+    folder_path = os.path.join(os.getcwd(), "data", class_number)
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
         print(f"Folder '{folder_path}' created.")
@@ -31,6 +31,5 @@ def download_and_save_text(url: str, output_file: str, class_number: str):
         
         print(f"Text has been extracted and saved to {text_file_path}") 
 
-
-#example call
-#download_and_save_text("https://www.geeksforgeeks.org/grep-command-in-unixlinux/?ref=leftbar-rightbar", "test13", "class123")
+# Example usage: Pass the URL, desired output file name, and class number
+#download_and_save_text("https://www.geeksforgeeks.org/grep-command-in-unixlinux/?ref=leftbar-rightbar", "test1", "class123")

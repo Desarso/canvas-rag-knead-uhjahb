@@ -13,7 +13,7 @@ load_dotenv()
 # # Canvas API key
 API_KEY = os.getenv("CANVAS_API")
 
- 
+
 class CanvasHelper:
 
     API_URL = "https://csus.instructure.com"

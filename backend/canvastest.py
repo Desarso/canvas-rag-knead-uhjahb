@@ -117,20 +117,59 @@ modules = courses[1].get_modules()
 #    print(file)
 
 
+# Set up the headers with the API key
+headers = {
+    'Authorization': f'Bearer {API_KEY}'
+}
 
+index = 1
 for module in modules:
+    items = module.get_module_items()
+    print("MODULE: ", index, module.name)
+    index += 1
+    for item in items:
+        print("     ", item, item.type)
+        if hasattr(item, 'url'):
+            print("url:", item.url)
+            try:
+                response = requests.get(item.url, headers=headers)
+                response.raise_for_status()  # Check for any request errors
+                print("     ", response.json())
+            except requests.exceptions.RequestException as e:
+                print(f"Error fetching URL: {e}")
+        if item.type == "File":
+            print("     ", item.__dict__)
+            file = canvas.get_file(item.content_id)
+            file.download(f"files/{item.title}")
+            break
+        if item.type == "ExternalUrl":
+            print("url:", item.external_url)
+
+
+
+
+
+
+"""for module in modules:
     print("MODULE:", module.id, module.name, sep=" | ")
-    print(dir(module))
-    print(module.__dict__)
-    """items = module.get_module_items()
+    #print(dir(module))
+    #print(module.__dict__)
+    items = module.get_module_items()
+    body = module.get_module_items()
+    #rint(body.get_page())
+    #print(body)
     for items in items:
         print(items.id, items.title, items.type, sep=" | ")
+        if items.type == "Page":
+            #test = items.get_page()
+            print(items.url)
+            
     #for item in items:
         #print(items.__dict__)
         #if hasattr(items, 'url'):
             #print(items.url)
-        if items.type == "File":
-            print(items.url)"""
+       # if items.type == "File":
+           # print(items.url)"""
 
 #canvas.get_file('6550472')
 #file_url = 
