@@ -15,4 +15,4 @@ pip install boltdb
 
 ##for tooling later
 pip install -U ell-ai
- pip install docx2txt
+pip install docx2txt

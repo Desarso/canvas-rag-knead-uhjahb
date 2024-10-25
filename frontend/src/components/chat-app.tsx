@@ -46,6 +46,7 @@ export function ChatAppComponent({ userId, chats, selectedChat }: Props) {
     console.log(chat);
     if (chat) {
       console.log("Selected Chat");
+      console.log(chat);
       console.log(chat.chat_history.store[selectedChat]);
       if (!chat.chat_history.store[selectedChat]) {
         chat.chat_history.store[selectedChat] = [];

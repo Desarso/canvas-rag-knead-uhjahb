@@ -66,6 +66,7 @@ class ChatEngine:
             documents=documents,
             storage_context=storage_context
         )
+        print("Collection created")
 
 
     def create_collection_from_course_id(self, course_id: str):
@@ -85,11 +86,16 @@ class ChatEngine:
             return
         else:
             print("Folder exists")
-            self.create_collection(course_id, course_directory)
+            ##check if collection exists
+            if self.does_collection_exist(course_id):
+                print("Collection exists")
+                return
+            ##self.create_collection(course_id, course_directory)
             return
         
 
     def does_collection_exist(self, name: str):
+        print(self.db.list_collections())
         return name in self.db.list_collections()
 
     def files_in_collection(self, name: str):

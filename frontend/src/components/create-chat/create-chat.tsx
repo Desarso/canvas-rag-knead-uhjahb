@@ -65,7 +65,8 @@ export function CreateChat({ children, userId, setUserId}: Props) {
       const data = await response.json();
       console.log("created chat?:", data);
       //set user ID to same thing to trigger useEffect and retrieve chats
-      setUserId(userId);
+      const user_id = userId;
+      setUserId(user_id);
     } catch (error) {
       console.error(error);
     }

@@ -12,6 +12,7 @@ from helpers.sqlite_handler import SQLiteDBHandler
 import logging
 from helpers.canvas import CanvasHelper
 import json
+from llama_index.core.storage.chat_store import SimpleChatStore
 load_dotenv()
 
 
@@ -94,7 +95,7 @@ def get_chats(user_id: str):
     raw_chat_histories = handler.retrieve_all_chat_histories(user_id)
     # print(raw_chat_histories)
     
-    print("here",raw_chat_histories)
+    #print("here",raw_chat_histories)
     parsed_chat_histories = []
 
     if not raw_chat_histories:
@@ -151,14 +152,16 @@ def create_chat(user_id: str, chat_id: str, course_id: str):
     ##first thing is check if the collection name exists, if not we create it, by downloading all files from the course
     ##then we create an empty chat history
     chat_engine = ChatEngine()
+    chat_store = SimpleChatStore()
     if chat_engine.does_collection_exist(course_id):
+
         ##collection exists
         handler = SQLiteDBHandler()
         handler.insert_chat_history(
             user_id=user_id, 
             chat_id=chat_id, 
             collection=course_id,
-            chat_history= "{}")
+            chat_history= chat_store.json())
     else:
         ##collection does not exist
         chat_engine.create_collection_from_course_id(course_id)
@@ -167,7 +170,7 @@ def create_chat(user_id: str, chat_id: str, course_id: str):
             user_id=user_id, 
             chat_id=chat_id, 
             collection=course_id,
-            chat_history= "{}")
+            chat_history= chat_store.json())
 
     return "Chat created successfully"
 
