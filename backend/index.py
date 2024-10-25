@@ -10,6 +10,7 @@ import uvicorn
 from helpers.chat_engine import ChatEngine
 from helpers.sqlite_handler import SQLiteDBHandler
 import logging
+from helpers.canvas import CanvasHelper
 import json
 load_dotenv()
 
@@ -93,8 +94,11 @@ def get_chats(user_id: str):
     raw_chat_histories = handler.retrieve_all_chat_histories(user_id)
     # print(raw_chat_histories)
     
-    #print(raw_chat_histories)
+    print("here",raw_chat_histories)
     parsed_chat_histories = []
+
+    if not raw_chat_histories:
+        return parsed_chat_histories    
 
     for chat in raw_chat_histories:
         chat_id = chat[0]
@@ -131,15 +135,57 @@ def delete_chat(user_id: str, chat_id: str):
     ##don't delete collection, we can keep the collection for future reference
     return "Chat deleted successfully"
 
+
+
+@app.post("/add_api_key")
+def add_api_key(user_id: str, api_key: str):
+    ##this is completely unsafe code, gotta fix later
+    handler = SQLiteDBHandler()
+    handler.insert_api_key(user_id, api_key)
+    return "API Key added successfully"
+     
+
+
+@app.get("/create_chat")
+def create_chat(user_id: str, chat_id: str, course_id: str):
+    ##first thing is check if the collection name exists, if not we create it, by downloading all files from the course
+    ##then we create an empty chat history
+    if ChatEngine.does_collection_exist(course_id):
+        ##collection exists
+        handler = SQLiteDBHandler()
+        handler.insert_chat_history(
+            user_id=user_id, 
+            chat_id=chat_id, 
+            collection=course_id,
+            chat_history= "{}")
+    else:
+        ##collection does not exist
+        chat_engine_instance = ChatEngine()
+        chat_engine_instance.create_collection_from_course_id(course_id)
+        handler = SQLiteDBHandler()
+        handler.insert_chat_history(
+            user_id=user_id, 
+            chat_id=chat_id, 
+            collection=course_id,
+            chat_history= "{}")
+
+    return "Chat created successfully"
+
+
+
+@app.get("/get_courses")
+def get_courses(user_id: str):
+    handler = SQLiteDBHandler()
+    api_key = handler.retrieve_api_key(user_id)
+    if not api_key:
+        return "No API Key found for user"
+    ##get courses from canvas
+    return CanvasHelper.get_courses_for_frontend(api_key)
+
 ##creating collections, each course from canvas will get it's own collection
 ##we should create this collections on user sign-up, for right now easiest solution is hard download every course to a dir in data
 ##then create a collection of the same name, we can alternatively give the user the option to create a collection for certain classes
 ##ideally we create the collection dynamically when the user first opens a chat with a cetain course ex. CSC-X
-
-@app.post("/collection")
-def create_collection(course_id: str):
-    ##we only create a collection if the course exists and has files in it\
-    return "testing"
 
 
 

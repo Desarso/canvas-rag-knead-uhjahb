@@ -51,9 +51,9 @@ def make_query(text: str):
 
 
 # collection = "test"
-# ##QueryEngine.create_collection(collection, "data")
 # chat_engine = ChatEngine()
-# chroma_collection = chat_engine.db.get_or_create_collection(collection)
+# chat_engine.create_collection(collection, "data")
+##chroma_collection = chat_engine.db.get_or_create_collection(collection)
 # vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
 # storage_context = StorageContext.from_defaults(vector_store=vector_store)
 # ##load from existing store
@@ -88,21 +88,32 @@ def make_query(text: str):
 #     print("")
 
 
-collection = "test"
-chat_id = "dfgdgdfg"
-user_id="35345454"
+# collection = "test"
+# chat_id = "dfgdgdfg"
+# user_id="35345454"
 
 
-chat_engine_instance = ChatEngine()
-# response = chat_engine_instance.chat_stream("author", "test", "chat4")
+# chat_engine_instance = ChatEngine()
+# # response = chat_engine_instance.chat_stream("author", "test", "chat4")
 
-while True:
-    message = input()
-    response = chat_engine_instance.chat_stream(
-        message=message,
-        collection=collection,
-        chat_id=chat_id, 
-        user_id=user_id)
-    for token in response:
-        print(token, end="")
-    print("")
+# while True:
+#     message = input()
+#     response = chat_engine_instance.chat_stream(
+#         message=message,
+#         collection=collection,
+#         chat_id=chat_id, 
+#         user_id=user_id)
+#     for token in response:
+#         print(token, end="")
+#     print("")
+
+##list files in test collection
+
+chat_engine = ChatEngine()
+coll = chat_engine.files_in_collection("test")
+##list all attributes of coll.get()
+stuff = coll.get()
+##save to json
+for x in range(len(stuff["ids"])):
+    doc = stuff["metadatas"][x]
+    print(doc['file_name'])
