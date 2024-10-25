@@ -1,13 +1,24 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+
 import "./index.css";
-import { SidebarProvider } from "./components/ui/sidebar.tsx";
+import App from "./App";
+import LandingPage from "./components/landing";
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <LandingPage />
+  },
+  {
+    path: '/chat',
+    element: <App />
+  }
+])
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <SidebarProvider>
-      <App />
-    </SidebarProvider>
+    <RouterProvider router={router} />
   </StrictMode>
 );
