@@ -90,6 +90,14 @@ class ChatEngine:
             if self.does_collection_exist(course_id):
                 print("Collection exists")
                 return
+            ##if folder is empty, download files
+            if not os.listdir(course_directory):
+                print("Folder is empty")
+               ##add txt file with message of empty folder
+                with open(os.path.join(course_directory, "empty.txt"), "w") as f:
+                    f.write("This collection is empty. Please upload files to this folder.")
+                self.create_collection(course_id, course_directory)
+                return
             self.create_collection(course_id, course_directory)
             return
         
