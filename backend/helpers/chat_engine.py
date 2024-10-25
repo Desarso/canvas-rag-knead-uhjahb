@@ -71,7 +71,7 @@ class ChatEngine:
 
     def create_collection_from_course_id(self, course_id: str):
         ##first we check if folder exists
-        base_directory = '../data'
+        base_directory = './data'
         course_directory = os.path.join(base_directory, course_id)
         if not os.path.exists(course_directory):
             print("Folder does not exist")

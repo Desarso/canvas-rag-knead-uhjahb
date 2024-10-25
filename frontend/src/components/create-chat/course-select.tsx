@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 
-interface Course {
+export interface Course {
   course_id: string;
   course_name: string;
   course_code: string;
