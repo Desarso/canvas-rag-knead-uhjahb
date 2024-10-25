@@ -172,7 +172,7 @@ export function ChatAppComponent({ userId, chats, selectedChat }: Props) {
             ))}
           </div>
           {/*Input area **/}
-          <div className="sticky bottom-0 left-0 right-0 p-4 border-t bg-white">
+          {selectedChat != "" ? <div className="sticky bottom-0 left-0 right-0 p-4 border-t bg-white">
             <div className="flex space-x-2">
               <Input
                 value={input}
@@ -184,7 +184,7 @@ export function ChatAppComponent({ userId, chats, selectedChat }: Props) {
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-          </div>
+          </div>: <div></div>}
         </div>
       </div>
     </div>

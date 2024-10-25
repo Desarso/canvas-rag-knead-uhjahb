@@ -2,6 +2,8 @@
 from canvasapi import Canvas
 from datetime import datetime
 from dotenv import load_dotenv
+from bs4 import BeautifulSoup
+import requests
 import os
 import requests
 
@@ -97,12 +99,67 @@ class CanvasHelper:
                 "url": file.url
             })
         return parsed_files
+    
+    @staticmethod
+    def get_module_text_from_course(course_id: str, api_key):
+        canvas = Canvas(CanvasHelper.API_URL, api_key)
+        course = canvas.get_course(course_id)
+        modules = course.get_modules()
+        headers = {'Authorization': f'Bearer {api_key}'}
+        index = 1
+
+        # Ensure the folder structure exists
+        folder_path = os.path.join(os.getcwd(), "../data", str(course.id))
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+            print(f"Folder '{folder_path}' created.")
+        else:
+            print(f"Folder '{folder_path}' already exists.")
+
+        for module in modules:
+            items = module.get_module_items()
+            #print("MODULE: ", index, module.name)
+            index += 1
+            for item in items:
+                #print("     ", item, item.type)
+                if item.type == "Page":
+                    #print("url:", item.url)
+                    try:
+                        # Fetch the page content using the item's URL
+                        response = requests.get(item.url, headers=headers)
+                        response.raise_for_status()  # Check for any request errors
+
+                        # Assuming the response is in JSON and contains the 'body' field
+                        json_data = response.json()
+                        if 'body' in json_data:
+                            # Extract HTML content from the 'body'
+                            text_html = json_data['body']
+                            soup = BeautifulSoup(text_html, 'html.parser')
+                            text = soup.get_text()
+
+                            # Prepare the file name by cleaning the item title (remove special characters)
+                            name = item.title.replace("/", "_")  # Avoid invalid characters in filenames
+                            text_file_path = os.path.join(folder_path, f"{name}.txt")
+
+                            # Write the text content to a file in the specified folder
+                            with open(text_file_path, "w", encoding="utf-8") as f:
+                                f.write(f"Title: {item.title}\n\n")
+                                f.write(text)
+
+                            print("File Saved")
+                        else:
+                            print(f"No 'body' found in the JSON response for {item.title}")
+
+                    except requests.exceptions.RequestException as e:
+                        print(f"Error fetching URL: {e}")
 
 
+#testmodule = CanvasHelper.get_module_text_from_course('124752', API_KEY)
 
+#print(testmodule)
 
 # ##for testing
-# canvas = Canvas(CanvasHelper.API_URL, API_KEY)
+"""# canvas = Canvas(CanvasHelper.API_URL, API_KEY)
 
 # courses = CanvasHelper.get_favorite_courses(API_KEY)
 # course = courses[0]
@@ -115,6 +172,8 @@ class CanvasHelper:
 
 # # CanvasHelper.download_files_from_course('122492')
 # # print("done")
+CanvasHelper.download_files_from_course('122492')
+print("done") """
 
 # index = 1
 # for module in modules:
