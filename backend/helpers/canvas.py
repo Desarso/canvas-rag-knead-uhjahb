@@ -145,7 +145,7 @@ class CanvasHelper:
                         print(f"Error fetching URL: {e}")
 
 
-testmodule = CanvasHelper.get_module_text_from_course('124752', API_KEY)
+#testmodule = CanvasHelper.get_module_text_from_course('124752', API_KEY)
 
 #print(testmodule)
 
