@@ -18,7 +18,7 @@ API_KEY = os.getenv("CANVAS_API")
 headers = {
     'Authorization': f'Bearer {API_KEY}'
 }
- 
+
 class CanvasHelper:
 
     API_URL = "https://csus.instructure.com"
