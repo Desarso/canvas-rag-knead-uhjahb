@@ -41,16 +41,17 @@ class CanvasHelper:
         else:
             print(f"Folder for course {id} already exists")
             return
-        files = CanvasHelper.get_files_from_course(id, API_KEY) 
-        print("Files: ")
-        for file in files:  
-            print(file)       
+        canvas = Canvas(CanvasHelper.API_URL, API_KEY)
+        course = canvas.get_course(id)
+        files = course.get_files()
+        # for file in files:  
+        #     print(file)       
         
         for file in files:
             print(file)
-            file_path = os.path.join(course_directory, file['display_name'])
+            file_path = os.path.join(course_directory, file.display_name)
             file.download(file_path)
-            print(f"Downloaded file: {file['display_name']}")
+            print(f"Downloaded file: {file.display_name}")
 
                 
 
