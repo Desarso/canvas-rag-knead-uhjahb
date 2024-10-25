@@ -90,7 +90,7 @@ class ChatEngine:
             if self.does_collection_exist(course_id):
                 print("Collection exists")
                 return
-            ##self.create_collection(course_id, course_directory)
+            self.create_collection(course_id, course_directory)
             return
         
 
