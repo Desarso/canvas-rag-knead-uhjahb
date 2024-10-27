@@ -49,7 +49,7 @@ With Compass, students can:
 ---
 
 ### Preview
-
+![](https://github.com/Desarso/canvas-rag-knead-uhjahb/blob/main/backend/unnamed.gif)
 
 
 ---
