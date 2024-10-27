@@ -1,71 +1,125 @@
+---
 
-# Canvas Rag
+# 🧭 Compass for Canvas
 
-A chatbot app with courses context using RAG. 
+**Fall 2024 AI Hackathon Project by Team Knead Uhjahb**
+
+**Compass** is an AI-driven web application that helps students quickly find specific information from their Canvas courses, addressing the problem of *knowledge bottlenecks*. By integrating a full Retrieval-Augmented Generation (RAG) system, Compass offers accurate, context-aware responses, simplifying the process of studying and reviewing course materials.
+
+---
+
+## 🚀 Project Overview
+
+### Problem Space
+
+Students often face the challenge of locating specific course information amidst extensive lecture notes and textbooks. This can result in time wasted and hindered academic progress.
+
+### Solution Space
+
+Compass addresses these issues by providing:
+- **Reduced AI Hallucinations**: Accurate answers sourced directly from course materials.
+- **Fast and Relevant Responses**: Saves time by pinpointing information students need most.
+- **User-Friendly Interface**: Seamless and easy to navigate.
+- **Canvas Integration**: Direct connection to Canvas courses for optimized user experience.
+
+## 💡 How It Works
+
+Compass leverages the following technologies to create an efficient and accurate information retrieval system:
+
+- **Retrieval-Augmented Generation (RAG)**: Combining generative AI with retrieval capabilities to ensure relevant, specific responses.
+- **Key Components**:
+  - **Llama-Index**: Supports structured data retrieval.
+  - **Groq**: Enhances processing efficiency.
+  - **Canvas API**: Provides direct integration with Canvas courses.
+  - **React & FastAPI**: A modern, robust tech stack to power the front and back end.
+  - **Python**: Core language for system integration and processing.
+
+## ✅ Validation
+
+Our model has undergone extensive testing to ensure that it:
+- Only answers relevant questions.
+- Utilizes information directly from course materials to avoid AI hallucinations.
+- Delivers concise, accurate responses quickly, helping students study effectively.
+
+## 📈 Impact & Benefits
+
+With Compass, students can:
+- Find course information faster than traditional study methods.
+- Engage in interactive learning experiences through back-and-forth queries.
+- Save valuable study time with auto-generated summaries.
+
+---
+
+### Preview
 
 
-## Preview
 
+---
 
+## 🛠️ How to Run
 
-https://github.com/user-attachments/assets/fa8aca59-18b9-431a-ac3d-f927ae294039
-
-
-
-## How to run
-
-Frontend and backend are in seperate folders
+The frontend and backend are located in separate folders.
 
 ### Frontend
 
-From frontend folder
+From the `frontend` folder, run:
 
-    npm install
-    npm run start
+```bash
+npm install
+npm run start
+```
 
 ### Backend
 
-From backend folder
+From the `backend` folder, follow these steps:
 
-Peferably create a virtual python enviroment
+1. Preferably, create a virtual Python environment:
 
+    ```bash
     python -m venv venv
+    ```
 
-Activate the enviroment 
+2. Activate the environment:
 
-Windows: 
+   - **Windows**:
+      ```bash
+      .\venv\Scripts\activate
+      ```
+   - **Linux/Mac**:
+      ```bash
+      source venv/bin/activate
+      ```
 
-    .\venv\Scripts\activate
+3. Install required packages:
 
-Linux/Mac:
+    ```bash
+    pip install python-dotenv canvasapi llama-index fastapi openai uvicorn
+    ```
 
-    source venv/bin/activate
+4. Rename `.env.example` to `.env` and add your API keys:
 
-Install packages:
-
-    pip install python-dotenv
-    pip install canvasapi
-    pip install llama-index
-    pip install fastapi
-    pip install openai
-    pip install uvicorn
-
-Rename .env.example to .env and add your api keys
-
+    ```
     CANVAS_API=
     GROQ_API_KEY=
+    ```
 
-Run the backend:
+5. Run the backend:
 
+    ```bash
     python index.py
+    ```
 
+---
 
+## 👥 Meet the Team
 
+- **Gabriel Malek** - Programmer
+- **William Lorence** - Software Engineer
+- **Kevin Esquivel** - Developer
+- **Rahul Gupta** - Coder
 
+---
 
+### Join us on our journey to redefine academic study tools and make learning more accessible!
 
-
-
-
-
-
+--- 
