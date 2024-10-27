@@ -1,5 +1,3 @@
----
-
 # 🧭 Compass for Canvas
 
 **Fall 2024 AI Hackathon Project by Team Knead Uhjahb**
